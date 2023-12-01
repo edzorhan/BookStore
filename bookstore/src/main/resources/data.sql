@@ -1,5 +1,6 @@
 delete from members;
 delete from books;
+delete from orders;
 INSERT INTO Members(memberId, name, surname,address) VALUES
     ( '1','sss', 'orhan','kagithane'),
     ( '2','mahmut', 'orhan','kagithane'),

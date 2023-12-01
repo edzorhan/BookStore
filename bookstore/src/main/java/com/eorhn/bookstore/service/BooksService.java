@@ -6,10 +6,7 @@ import com.eorhn.bookstore.model.requesttypes.booksapis.InsertBookApiRequest;
 import com.eorhn.bookstore.model.requesttypes.booksapis.UpdateBookApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
-import com.eorhn.bookstore.model.responsetypes.booksapis.GetAllBooksApiResponse;
-import com.eorhn.bookstore.model.responsetypes.booksapis.GetBookApiResponse;
-import com.eorhn.bookstore.model.responsetypes.booksapis.InsertBookApiResponse;
-import com.eorhn.bookstore.model.responsetypes.booksapis.UpdateBookInfoApiResponse;
+import com.eorhn.bookstore.model.responsetypes.booksapis.*;
 import com.eorhn.bookstore.model.responsetypes.membersapis.GetAllMembersInfoApiResponse;
 import com.eorhn.bookstore.model.responsetypes.membersapis.GetMemberInfoApiResponse;
 import com.eorhn.bookstore.model.responsetypes.membersapis.InsertMemberApiResponse;
@@ -49,7 +46,7 @@ public class BooksService {
         GetAllBooksApiResponse response = new GetAllBooksApiResponse();
 
         Optional<List<TblBooks>> booksList = Optional.of(booksRepository.findAll());
-        if (!booksList.isEmpty()){
+        if (!booksList.get().isEmpty()){
             response.setBooksList(booksList.get());
             response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse());
         }
@@ -105,6 +102,18 @@ public class BooksService {
         }catch (Exception e){
             System.out.println(e.getMessage());
             response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Insert caught exception",-1));
+        }
+        return response;
+    }
+
+    public DeleteBookApiResponse deleteBook(long id){
+        DeleteBookApiResponse response = new DeleteBookApiResponse();
+        if(booksRepository.existsById(id)){
+            booksRepository.deleteById(id);
+            response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse("Record deleted."));
+        }
+        else{
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Record does not exists!",04));
         }
         return response;
     }

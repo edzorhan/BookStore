@@ -4,10 +4,7 @@ import com.eorhn.bookstore.model.requesttypes.booksapis.InsertBookApiRequest;
 import com.eorhn.bookstore.model.requesttypes.booksapis.UpdateBookApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
-import com.eorhn.bookstore.model.responsetypes.booksapis.GetAllBooksApiResponse;
-import com.eorhn.bookstore.model.responsetypes.booksapis.GetBookApiResponse;
-import com.eorhn.bookstore.model.responsetypes.booksapis.InsertBookApiResponse;
-import com.eorhn.bookstore.model.responsetypes.booksapis.UpdateBookInfoApiResponse;
+import com.eorhn.bookstore.model.responsetypes.booksapis.*;
 import com.eorhn.bookstore.model.responsetypes.membersapis.GetAllMembersInfoApiResponse;
 import com.eorhn.bookstore.model.responsetypes.membersapis.GetMemberInfoApiResponse;
 import com.eorhn.bookstore.model.responsetypes.membersapis.InsertMemberApiResponse;
@@ -41,19 +38,24 @@ public class BooksController {
 
     @GetMapping(path="/get/all")
     @Operation(summary = "Returns all books in inventory.")
-    public ResponseEntity<GetAllBooksApiResponse> getAllMembers(){
+    public ResponseEntity<GetAllBooksApiResponse> getAllBooks(){
         return ResponseEntity.status(HttpStatus.OK).body(booksService.getAllBooks());
     }
 
     @PostMapping(path="/update")
     @Operation(summary = "Updates existing row in inventory.")
-    public ResponseEntity<UpdateBookInfoApiResponse> updateMember(@RequestBody UpdateBookApiRequest apiRequest){
+    public ResponseEntity<UpdateBookInfoApiResponse> updateBook(@RequestBody UpdateBookApiRequest apiRequest){
         return ResponseEntity.status(HttpStatus.OK).body(booksService.updateBook(apiRequest));
     }
 
     @PostMapping(path="/insert")
     @Operation(summary = "Inserts new book record to table.")
-    public ResponseEntity<InsertBookApiResponse> updateMember(@RequestBody @Valid InsertBookApiRequest apiRequest){
+    public ResponseEntity<InsertBookApiResponse> insertBook(@RequestBody @Valid InsertBookApiRequest apiRequest){
         return ResponseEntity.status(HttpStatus.OK).body(booksService.insertBook(apiRequest));
+    }
+    @DeleteMapping(path="/delete/{bookId}")
+    @Operation(summary = "Deletes book record by given ID.")
+    public ResponseEntity<DeleteBookApiResponse> deleteBook(@NumberFormat(style= NumberFormat.Style.NUMBER) @PathVariable long bookId){
+        return ResponseEntity.status(HttpStatus.OK).body(booksService.deleteBook(bookId));
     }
 }
