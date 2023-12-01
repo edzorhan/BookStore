@@ -1,16 +1,24 @@
 package com.eorhn.bookstore.controller;
 
-import com.eorhn.bookstore.model.responsetypes.GetMemberInfoApiResponse;
+import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
+import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
+import com.eorhn.bookstore.model.responsetypes.membersapis.GetAllMembersInfoApiResponse;
+import com.eorhn.bookstore.model.responsetypes.membersapis.GetMemberInfoApiResponse;
+import com.eorhn.bookstore.model.responsetypes.membersapis.InsertMemberApiResponse;
+import com.eorhn.bookstore.model.responsetypes.membersapis.UpdateMemberInfoApiResponse;
 import com.eorhn.bookstore.service.MembersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
+import jakarta.validation.Valid;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/members")
+@Tags({@Tag(name = "Members Operations")})
 public class MembersController {
     private final MembersService membersService;
 
@@ -19,7 +27,26 @@ public class MembersController {
     }
 
     @GetMapping(path="/get/{memberId}")
-    public ResponseEntity<GetMemberInfoApiResponse> getMember(@PathVariable long memberId){
+    @Operation(summary = "Returns member by given ID.")
+    public ResponseEntity<GetMemberInfoApiResponse> getMember(@NumberFormat(style= NumberFormat.Style.NUMBER) @PathVariable long memberId){
         return ResponseEntity.status(HttpStatus.OK).body(membersService.memberInfo(memberId));
+    }
+
+    @GetMapping(path="/get/all")
+    @Operation(summary = "Returns all members.")
+    public ResponseEntity<GetAllMembersInfoApiResponse> getAllMembers(){
+        return ResponseEntity.status(HttpStatus.OK).body(membersService.allMembersInfo());
+    }
+
+    @PostMapping(path="/update")
+    @Operation(summary = "Updates existing member.")
+    public ResponseEntity<UpdateMemberInfoApiResponse> updateMember(@RequestBody UpdateMemberApiRequest apiRequest){
+        return ResponseEntity.status(HttpStatus.OK).body(membersService.updateMemberInfo(apiRequest));
+    }
+
+    @PostMapping(path="/insert")
+    @Operation(summary = "Inserts new member to table.")
+    public ResponseEntity<InsertMemberApiResponse> updateMember(@RequestBody @Valid InsertMemberApiRequest apiRequest){
+        return ResponseEntity.status(HttpStatus.OK).body(membersService.insertMember(apiRequest));
     }
 }
