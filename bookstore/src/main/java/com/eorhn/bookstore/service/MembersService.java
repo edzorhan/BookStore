@@ -4,10 +4,8 @@ import com.eorhn.bookstore.model.dtos.MemberDto;
 import com.eorhn.bookstore.model.entities.TblMembers;
 import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
-import com.eorhn.bookstore.model.responsetypes.membersapis.GetAllMembersInfoApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.GetMemberInfoApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.InsertMemberApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.UpdateMemberInfoApiResponse;
+import com.eorhn.bookstore.model.responsetypes.booksapis.DeleteBookApiResponse;
+import com.eorhn.bookstore.model.responsetypes.membersapis.*;
 import com.eorhn.bookstore.repository.MembersRepository;
 import com.eorhn.bookstore.utilities.ResponseHeaderHelper;
 import org.springframework.stereotype.Service;
@@ -49,7 +47,7 @@ public class MembersService {
         GetAllMembersInfoApiResponse response = new GetAllMembersInfoApiResponse();
         TblMembers tblMembers = new TblMembers();
         Optional<List<TblMembers>> allMembers = Optional.of(membersRepository.findAll());
-        if (!allMembers.isEmpty()){
+        if (!allMembers.get().isEmpty()){
             response.setMemberInfo(allMembers.get());
             response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse());
         }
@@ -106,6 +104,18 @@ public class MembersService {
         }catch (Exception e){
             System.out.println(e.getMessage());
             response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Insert caught exception",-1));
+        }
+        return response;
+    }
+
+    public DeleteMemberApiResponse deleteMember(long id){
+        DeleteMemberApiResponse response = new DeleteMemberApiResponse();
+        if(membersRepository.existsById(id)){
+            membersRepository.deleteById(id);
+            response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse("Record deleted."));
+        }
+        else{
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Record does not exists!",04));
         }
         return response;
     }

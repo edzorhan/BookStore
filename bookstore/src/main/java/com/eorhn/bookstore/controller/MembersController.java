@@ -2,10 +2,8 @@ package com.eorhn.bookstore.controller;
 
 import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
-import com.eorhn.bookstore.model.responsetypes.membersapis.GetAllMembersInfoApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.GetMemberInfoApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.InsertMemberApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.UpdateMemberInfoApiResponse;
+import com.eorhn.bookstore.model.responsetypes.booksapis.DeleteBookApiResponse;
+import com.eorhn.bookstore.model.responsetypes.membersapis.*;
 import com.eorhn.bookstore.service.MembersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,7 +44,12 @@ public class MembersController {
 
     @PostMapping(path="/insert")
     @Operation(summary = "Inserts new member to table.")
-    public ResponseEntity<InsertMemberApiResponse> updateMember(@RequestBody @Valid InsertMemberApiRequest apiRequest){
+    public ResponseEntity<InsertMemberApiResponse> insertMember(@RequestBody @Valid InsertMemberApiRequest apiRequest){
         return ResponseEntity.status(HttpStatus.OK).body(membersService.insertMember(apiRequest));
+    }
+    @DeleteMapping(path="/delete/{memberId}")
+    @Operation(summary = "Deletes book record by given ID.")
+    public ResponseEntity<DeleteMemberApiResponse> deleteMember(@NumberFormat(style= NumberFormat.Style.NUMBER) @PathVariable long memberId){
+        return ResponseEntity.status(HttpStatus.OK).body(membersService.deleteMember(memberId));
     }
 }
