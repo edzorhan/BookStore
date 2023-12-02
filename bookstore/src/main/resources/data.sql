@@ -2,10 +2,10 @@ delete from members;
 delete from books;
 delete from orders;
 INSERT INTO Members(memberId, name, surname,address) VALUES
-    ( '1','sss', 'orhan','kagithane'),
-    ( '2','mahmut', 'orhan','kagithane'),
-    ( '3','ahmet', 'orhan','kagithane'),
-    ( '5','qq', 'orhan','kagithane');
+    ( '1','Ediz', 'Orhan','kagithane'),
+    ( '2','Mert', 'Yildiz','besiktas'),
+    ( '3','Batuhan', 'Yilmaz','kadiköy'),
+    ( '4','Ceren','Saygin','sariyer');
 INSERT INTO Books(bookId, book_name, author,price,stock_count) VALUES
                                                          ( '100','1984', 'George Orwell',8,124),
                                                          ( '101','Fahrenheit 451', 'Ray Bradbury',15,30),

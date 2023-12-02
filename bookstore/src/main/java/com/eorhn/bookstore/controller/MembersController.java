@@ -2,7 +2,6 @@ package com.eorhn.bookstore.controller;
 
 import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
-import com.eorhn.bookstore.model.responsetypes.booksapis.DeleteBookApiResponse;
 import com.eorhn.bookstore.model.responsetypes.membersapis.*;
 import com.eorhn.bookstore.service.MembersService;
 import io.swagger.v3.oas.annotations.Operation;

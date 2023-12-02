@@ -4,7 +4,6 @@ import com.eorhn.bookstore.model.dtos.MemberDto;
 import com.eorhn.bookstore.model.entities.TblMembers;
 import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
-import com.eorhn.bookstore.model.responsetypes.booksapis.DeleteBookApiResponse;
 import com.eorhn.bookstore.model.responsetypes.membersapis.*;
 import com.eorhn.bookstore.repository.MembersRepository;
 import com.eorhn.bookstore.utilities.ResponseHeaderHelper;
@@ -22,11 +21,7 @@ public class MembersService {
         this.membersRepository = membersRepository;
     }
 
-    /**
-     *
-     * @param id
-     * @return
-     */
+
     public GetMemberInfoApiResponse memberInfo(long id){
         GetMemberInfoApiResponse response = new GetMemberInfoApiResponse();
         MemberDto memberInfo = new MemberDto();
