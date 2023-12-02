@@ -1,16 +1,9 @@
 package com.eorhn.bookstore.service;
 
 import com.eorhn.bookstore.model.entities.TblBooks;
-import com.eorhn.bookstore.model.entities.TblMembers;
 import com.eorhn.bookstore.model.requesttypes.booksapis.InsertBookApiRequest;
 import com.eorhn.bookstore.model.requesttypes.booksapis.UpdateBookApiRequest;
-import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
-import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
 import com.eorhn.bookstore.model.responsetypes.booksapis.*;
-import com.eorhn.bookstore.model.responsetypes.membersapis.GetAllMembersInfoApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.GetMemberInfoApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.InsertMemberApiResponse;
-import com.eorhn.bookstore.model.responsetypes.membersapis.UpdateMemberInfoApiResponse;
 import com.eorhn.bookstore.repository.BooksRepository;
 import com.eorhn.bookstore.utilities.ResponseHeaderHelper;
 import org.springframework.stereotype.Service;

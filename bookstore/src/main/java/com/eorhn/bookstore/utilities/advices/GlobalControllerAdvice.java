@@ -15,6 +15,11 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalControllerAdvice {
 
+    /**
+     * Advice built for returning custom validation error messages.
+     * @param ex
+     * @return
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
