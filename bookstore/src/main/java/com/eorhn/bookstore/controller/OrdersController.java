@@ -8,6 +8,7 @@ import com.eorhn.bookstore.service.OrdersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class OrdersController {
     }
     @PostMapping(path="/placeOrder")
     @Operation(summary = "Places order on requested item.")
-    public ResponseEntity<PlaceOrderApiResponse> placeOrder(@RequestBody PlaceOrderApiRequest apiRequest){
+    public ResponseEntity<PlaceOrderApiResponse> placeOrder(@RequestBody @Valid PlaceOrderApiRequest apiRequest){
         return ResponseEntity.status(HttpStatus.OK).body(ordersService.placeOrder(apiRequest));
     }
 
