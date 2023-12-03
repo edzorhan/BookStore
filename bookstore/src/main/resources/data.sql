@@ -4,7 +4,7 @@ delete from orders;
 INSERT INTO Members(memberId, name, surname,address) VALUES
     ( '1','Ediz', 'Orhan','kagithane'),
     ( '2','Mert', 'Yildiz','besiktas'),
-    ( '3','Batuhan', 'Yilmaz','kadiköy'),
+    ( '3','Batuhan', 'Yilmaz','kadikoy'),
     ( '4','Ceren','Saygin','sariyer');
 INSERT INTO Books(bookId, book_name, author,price,stock_count) VALUES
                                                          ( '100','1984', 'George Orwell',8,124),
