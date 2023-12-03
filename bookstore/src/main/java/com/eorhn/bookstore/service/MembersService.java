@@ -2,16 +2,18 @@ package com.eorhn.bookstore.service;
 
 import com.eorhn.bookstore.model.dtos.MemberDto;
 import com.eorhn.bookstore.model.entities.TblMembers;
+import com.eorhn.bookstore.model.enums.Errors;
 import com.eorhn.bookstore.model.requesttypes.membersapis.InsertMemberApiRequest;
 import com.eorhn.bookstore.model.requesttypes.membersapis.UpdateMemberApiRequest;
 import com.eorhn.bookstore.model.responsetypes.membersapis.*;
 import com.eorhn.bookstore.repository.MembersRepository;
 import com.eorhn.bookstore.utilities.ResponseHeaderHelper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class MembersService {
 
@@ -32,10 +34,29 @@ public class MembersService {
                 response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse());
             }
             else {
-                response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Member does not exist",02));
+                response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.MEMBER_NOT_FOUND.message,Errors.MEMBER_NOT_FOUND.code));
 
             }
             return response;
+    }
+
+    /**
+     * Returns paginated and sorted list of all members by given Page parameters
+     * @param pageable
+     * @return GetPagedMembersInfoApiResponse
+     */
+    public GetPagedMembersInfoApiResponse allMembersInfoPaginated(Pageable pageable){
+        GetPagedMembersInfoApiResponse response = new GetPagedMembersInfoApiResponse();
+        Optional<Page<TblMembers>> allMembers = Optional.of(membersRepository.findAll(pageable));
+        if (!allMembers.get().isEmpty()) {
+            response.setMemberInfo(allMembers.get().getContent());
+            response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse());
+        }
+        else {
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.TABLE_IS_EMPTY.message,Errors.TABLE_IS_EMPTY.code));
+        }
+
+        return response;
     }
 
     public GetAllMembersInfoApiResponse allMembersInfo(){
@@ -47,7 +68,7 @@ public class MembersService {
             response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse());
         }
         else {
-            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Table is empty",01));
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.TABLE_IS_EMPTY.message,Errors.TABLE_IS_EMPTY.code));
         }
         return response;
     }
@@ -67,13 +88,13 @@ public class MembersService {
                 response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse("Member information updated."));
             }
             else{
-                  response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Member does not exists!",02));
+                  response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.MEMBER_NOT_FOUND.message,Errors.MEMBER_NOT_FOUND.code));
                   return response;
             }
 
         }catch (Exception e){
             System.out.println(e.getMessage());
-            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Update caught exception",-1));
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.UPDATE_GENERAL_EXCEPTION.message, Errors.UPDATE_GENERAL_EXCEPTION.code));
         }
         return response;
     }
@@ -92,13 +113,13 @@ public class MembersService {
                 response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse("New member created."));
             }
             else{
-                response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Member already exists!",03));
+                response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.MEMBER_ALREADY_EXISTS.message,Errors.MEMBER_ALREADY_EXISTS.code));
                 return response;
             }
 
         }catch (Exception e){
             System.out.println(e.getMessage());
-            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Insert caught exception",-1));
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.INSERT_GENERAL_EXCEPTION.message,Errors.INSERT_GENERAL_EXCEPTION.code));
         }
         return response;
     }
@@ -110,7 +131,7 @@ public class MembersService {
             response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse("Record deleted."));
         }
         else{
-            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Record does not exists!",04));
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.DELETE_NOT_FOUND.message, Errors.DELETE_NOT_FOUND.code));
         }
         return response;
     }

@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface MembersRepository extends JpaRepository<TblMembers,Long>, JpaSpecificationExecutor {
 
     Optional<TblMembers> findById(long memberId);
+
 }

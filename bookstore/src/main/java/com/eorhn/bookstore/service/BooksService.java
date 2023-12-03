@@ -1,11 +1,14 @@
 package com.eorhn.bookstore.service;
 
 import com.eorhn.bookstore.model.entities.TblBooks;
+import com.eorhn.bookstore.model.enums.Errors;
 import com.eorhn.bookstore.model.requesttypes.booksapis.InsertBookApiRequest;
 import com.eorhn.bookstore.model.requesttypes.booksapis.UpdateBookApiRequest;
 import com.eorhn.bookstore.model.responsetypes.booksapis.*;
 import com.eorhn.bookstore.repository.BooksRepository;
 import com.eorhn.bookstore.utilities.ResponseHeaderHelper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,9 +33,28 @@ public class BooksService {
                 response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse());
             }
             else {
-                response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Book does not exist",02));
+                response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.BOOK_NOT_FOUND.message,Errors.BOOK_NOT_FOUND.code));
             }
             return response;
+    }
+
+    /**
+     * Returns paginated and sorted list of all books by given Page parameters.
+     * @param pageable
+     * @return GetPagedMembersInfoApiResponse
+     */
+    public GetPagedBooksInfoApiResponse allBooksInfoPaginated(Pageable pageable){
+        GetPagedBooksInfoApiResponse response = new GetPagedBooksInfoApiResponse();
+        Optional<Page<TblBooks>> allBooks = Optional.of(booksRepository.findAll(pageable));
+        if (!allBooks.get().isEmpty()) {
+            response.setBookInfo(allBooks.get().getContent());
+            response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse());
+        }
+        else {
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.TABLE_IS_EMPTY.message,Errors.TABLE_IS_EMPTY.code));
+        }
+
+        return response;
     }
 
     public GetAllBooksApiResponse getAllBooks(){
@@ -44,7 +66,7 @@ public class BooksService {
             response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse());
         }
         else {
-            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Table is empty",01));
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.TABLE_IS_EMPTY.message, Errors.TABLE_IS_EMPTY.code));
         }
         return response;
     }
@@ -64,12 +86,12 @@ public class BooksService {
                 response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse("Book information updated."));
             }
             else{
-                  response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Book does not exists!",02));
+                  response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.BOOK_NOT_FOUND.message,Errors.BOOK_NOT_FOUND.code));
             }
 
         }catch (Exception e){
             System.out.println(e.getMessage());
-            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Update caught exception",-1));
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.UPDATE_GENERAL_EXCEPTION.message, Errors.UPDATE_GENERAL_EXCEPTION.code));
         }
         return response;
     }
@@ -89,12 +111,12 @@ public class BooksService {
                 response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse("New book added."));
             }
             else{
-                response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Book already exists!",03));
+                response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.BOOK_ALREADY_EXISTS.message,Errors.BOOK_ALREADY_EXISTS.code));
             }
 
         }catch (Exception e){
             System.out.println(e.getMessage());
-            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Insert caught exception",-1));
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.INSERT_GENERAL_EXCEPTION.message,Errors.INSERT_GENERAL_EXCEPTION.code));
         }
         return response;
     }
@@ -106,7 +128,7 @@ public class BooksService {
             response.setResponseHeader(ResponseHeaderHelper.constructSuccessResponse("Record deleted."));
         }
         else{
-            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse("Record does not exists!",04));
+            response.setResponseHeader(ResponseHeaderHelper.constructErrorResponse(Errors.DELETE_NOT_FOUND.message,Errors.DELETE_NOT_FOUND.code));
         }
         return response;
     }
